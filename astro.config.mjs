@@ -8,9 +8,37 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
 
+function resolveSiteAndBase() {
+  if (process.env.SITE_URL || process.env.BASE_PATH) {
+    return {
+      site: process.env.SITE_URL || "https://example.com",
+      base: process.env.BASE_PATH || "/",
+    };
+  }
+
+  const repoSlug = process.env.GITHUB_REPOSITORY;
+  if (repoSlug && repoSlug.includes("/")) {
+    const [owner, repo] = repoSlug.split("/");
+    const isUserSite =
+      repo.toLowerCase() === `${owner.toLowerCase()}.github.io`;
+    return {
+      site: `https://${owner.toLowerCase()}.github.io`,
+      base: isUserSite ? "/" : `/${repo}`,
+    };
+  }
+
+  return {
+    site: "https://example.com",
+    base: "/",
+  };
+}
+
+const { site, base } = resolveSiteAndBase();
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com",
+  site,
+  base,
   integrations: [
     mdx(),
     sitemap(),
