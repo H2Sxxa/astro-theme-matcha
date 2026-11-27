@@ -1,0 +1,54 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { siteConfig } from "@/site.config";
+import { Image } from "astro:assets";
+import ExpressiveItalic from "@/components/expressive/ExpressiveItalic.astro";
+import ExpressiveBadge from "@/components/expressive/ExpressiveBadge.astro";
+
+const friends = siteConfig.navigation.friends;
+---
+
+<BaseLayout title="Friends" showTitleTemplate>
+  <main class="page">
+    <h1 class="page-title flex items-center gap-3">
+      <ExpressiveItalic>Friends</ExpressiveItalic>
+      <ExpressiveBadge class="text-sm tabular-nums">{friends.length}</ExpressiveBadge>
+    </h1>
+    <p class="page-subtitle mb-8">
+      Feel free to add your own blog link!
+    </p>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {
+        friends.map((friend, index) => (
+          <a
+            href={friend.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group decorative flex items-center gap-4 p-4 no-underline"
+          >
+            <Image
+              src={friend.avatar}
+              alt={friend.title}
+              inferSize
+              loading="eager"
+              class="h-14 w-14 shrink-0 rounded-[38%] border-[1.5px] border-primary/35 object-cover transition-[border-radius,transform,border-color] duration-350 ease-(--ease-spring) group-hover:scale-105 group-hover:rounded-[50%] group-hover:border-primary"
+              aria-label={`${friend.title}'s avatar`}
+            />
+            <div class="min-w-0">
+              <h2 class="truncate font-expressive text-lg font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                {friend.title}
+              </h2>
+              <p class="mt-0.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                {friend.intro}
+              </p>
+            </div>
+
+            <div class="decorative-index text-5xl">
+              {index < 9 ? `0${index + 1}` : index + 1}
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+import { siteConfig } from "@/site.config";
+
+interface Props {
+  date: Date;
+}
+
+const { date } = Astro.props;
+---
+
+<time datetime={date.toISOString()}>
+  {date.toLocaleDateString(siteConfig.site.dateLocale)}
+</time>

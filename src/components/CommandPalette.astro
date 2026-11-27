@@ -1,0 +1,84 @@
+---
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+import { siteConfig } from "@/site.config";
+
+const { commandPalette, navigation } = siteConfig;
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .map((post) => ({
+    title: post.data.title,
+    href: `/blog/${post.id}`,
+    tags: post.data.tags ?? [],
+    date: post.data.pubDate.toISOString().slice(0, 10),
+  }));
+
+const pages = navigation.explore.map((link) => ({
+  title: link.title,
+  description: link.description,
+  href: link.href,
+}));
+
+const payload: string = JSON.stringify({
+  posts,
+  pages,
+  links: commandPalette.links ?? [],
+  resultLimit: commandPalette.resultLimit,
+});
+---
+
+<div
+  id="cmd-palette-backdrop"
+  class="pointer-events-none fixed inset-0 z-100 hidden items-start justify-center bg-background/60 px-4 pt-[12vh] opacity-0 backdrop-blur-sm transition-opacity duration-150"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Command palette"
+  transition:persist="cmd-palette"
+>
+  <div
+    id="cmd-palette-panel"
+    class="w-full max-w-xl scale-95 overflow-hidden rounded-[28px] border border-border bg-card shadow-2xl transition-transform duration-300 ease-(--ease-spring-soft)"
+  >
+    <div class="flex items-center gap-3 border-b border-border px-4 py-3">
+      <Icon name="mdi:magnify" is:inline class="h-5 w-5 shrink-0 text-muted-foreground" />
+      <input
+        id="cmd-palette-input"
+        type="text"
+        placeholder={commandPalette.placeholder}
+        autocomplete="off"
+        spellcheck="false"
+        class="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+      />
+      <kbd
+        class="hidden shrink-0 rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground sm:inline-block"
+      >
+        ESC
+      </kbd>
+    </div>
+
+    <div
+      id="cmd-palette-list"
+      class="max-h-[55vh] overflow-y-auto p-2"
+      role="listbox"
+    >
+    </div>
+
+    <div
+      class="flex items-center justify-between border-t border-border bg-muted/40 px-4 py-2 font-mono text-[11px] text-muted-foreground"
+    >
+      <div class="flex items-center gap-3">
+        <span>↑↓ Navigate</span>
+        <span>↵ Open</span>
+      </div>
+      <span>⌘K / Ctrl+K</span>
+    </div>
+  </div>
+</div>
+
+<script is:inline id="cmd-palette-data" type="application/json" set:html={payload}></script>
+
+<script>
+  import { initCommandPalette } from "@/scripts/commandPalette";
+  initCommandPalette();
+</script>

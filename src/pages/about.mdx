@@ -1,0 +1,52 @@
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/Text.astro";
+import Avatar from "@/components/Avatar.astro";
+import ExpressiveItalic from "@/components/expressive/ExpressiveItalic.astro";
+import { siteConfig } from "@/site.config";
+import { Icon } from "astro-icon/components";
+
+<BaseLayout title="About" showTitleTemplate>
+  <main>
+    <div class="mt-12 mb-4 flex flex-col items-center px-4">
+      <Avatar src={siteConfig.author.avatar} alt={siteConfig.author.name} />
+      <h1 class="page-title mt-5">
+        About <ExpressiveItalic>Me</ExpressiveItalic>
+      </h1>
+      <nav aria-label="Social links">
+        <ul class="mt-4 flex flex-wrap justify-center gap-2">
+          {
+            siteConfig.author.socials.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.title}
+                  class="m3-pill inline-flex items-center gap-1.5 border border-border/85 bg-card/80 px-3.5 py-1.5 font-mono text-xs text-muted-foreground no-underline hover:border-primary/45 hover:bg-primary-container hover:text-on-primary-container"
+                >
+                  <Icon name={link.icon} class="h-4 w-4" />
+                  <span>{link.title}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+    <Text class="mx-auto max-w-4xl p-4">
+      <div class="font-serif font-bold">
+        *Hi there, I am {siteConfig.author.name}!*
+      </div>
+
+      Welcome to your new blog powered by **Matcha**.
+
+      Edit `src/pages/about.mdx` directly to tell readers who you are, what you build, and what you care about.
+
+      ---
+
+      ## Customize This Page
+
+      Because this is a standard Astro MDX page, you can freely mix Markdown prose with custom Astro components, callouts, or project lists.
+    </Text>
+  </main>
+</BaseLayout>

@@ -1,0 +1,112 @@
+---
+// 4-band staggered horizontal curtain transition inspired by chromasounds.work,
+// featuring a flat Material 3 Expressive (M3E) morphing loading indicator.
+import { siteConfig } from "@/site.config";
+
+const STRIPS = [0, 1, 2, 3] as const;
+const routesPayload: string = JSON.stringify(siteConfig.navigation.routes);
+---
+
+<div
+  id="route-transition-overlay"
+  class="route-transition-overlay is-idle pointer-events-none fixed inset-0 z-9998 overflow-hidden overscroll-none touch-none"
+  aria-hidden="true"
+  transition:persist="route-curtain"
+>
+  {
+    STRIPS.map((index) => (
+      <div
+        class="route-transition-strip absolute right-0 left-0 isolate overflow-hidden bg-accent will-change-[clip-path]"
+        data-rt-strip={index}
+        style={`top: ${index * 25}%; height: calc(25% + 2px);`}
+      >
+        <div class="pointer-events-none fixed inset-0 flex flex-col items-center justify-center text-primary select-none">
+          <div class="flex flex-col items-center gap-4">
+            <div class="flex h-15 w-15 items-center justify-center text-primary">
+              <svg
+                class="h-14 w-14 will-change-transform"
+                data-m3e-svg
+                viewBox="-52 -52 104 104"
+                aria-hidden="true"
+              >
+                <path data-m3e-path fill="currentColor" d="" />
+              </svg>
+            </div>
+            <div class="rt-meta flex items-baseline gap-2.5 opacity-0">
+              <span
+                data-rt-index
+                class="font-mono text-xs tracking-[0.12em] text-muted-foreground"
+              >
+                ??
+              </span>
+              <span
+                data-rt-label
+                class="font-serif text-2xl font-semibold tracking-[0.14em] text-foreground"
+              >
+                ELSEWHERE
+              </span>
+            </div>
+          </div>
+          <span
+            data-rt-path
+            class="rt-path fixed bottom-8 font-mono text-xs tracking-[0.08em] text-muted-foreground opacity-0"
+          >
+            /*
+          </span>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .route-transition-overlay.is-idle {
+    visibility: hidden;
+  }
+
+  .route-transition-overlay:not(.is-idle) {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .route-transition-strip {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .route-transition-overlay:not(.is-idle) .rt-meta {
+    animation: rt-reveal-text 240ms ease 180ms forwards;
+  }
+
+  .route-transition-overlay:not(.is-idle) .rt-path {
+    animation: rt-reveal-text 220ms ease 220ms forwards;
+  }
+
+  @keyframes rt-reveal-text {
+    0% {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .route-transition-overlay {
+      display: none !important;
+    }
+  }
+</style>
+
+<script
+  is:inline
+  id="route-curtain-data"
+  type="application/json"
+  set:html={routesPayload}
+></script>
+
+<script>
+  import { initRouteCurtain } from "@/scripts/routeCurtain";
+  initRouteCurtain();
+</script>

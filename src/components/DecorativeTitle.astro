@@ -1,0 +1,23 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+}
+
+const { href, title, description } = Astro.props as Props;
+---
+
+<h2
+  class="block font-expressive text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary md:text-2xl"
+>
+  <a
+    href={href}
+    class="text-inherit no-underline after:absolute after:inset-0 hover:text-primary"
+  >
+    {title}
+  </a>
+</h2>
+<p class="mt-2 text-sm leading-6 text-muted-foreground">
+  {description}
+</p>

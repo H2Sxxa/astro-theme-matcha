@@ -1,0 +1,73 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import type { GetStaticPaths, Page } from "astro";
+import { Icon } from "astro-icon/components";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { siteConfig } from "@/site.config";
+import ArticlesNavigator from "@/components/ArticlesNavigator.astro";
+import ArticleTile from "@/components/ArticleTile.astro";
+import ExpressiveItalic from "@/components/expressive/ExpressiveItalic.astro";
+import ExpressiveBadge from "@/components/expressive/ExpressiveBadge.astro";
+
+interface Props {
+  page: Page<CollectionEntry<"blog">>;
+}
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  );
+  return paginate(posts, {
+    pageSize: siteConfig.blog.pageSize,
+  });
+};
+
+const { page } = Astro.props;
+---
+
+<BaseLayout title="Blog" showTitleTemplate>
+  <main class="mx-auto max-w-4xl px-4 py-10 md:px-6">
+    <header class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div>
+        <h1 class="page-title flex items-center gap-3">
+          <ExpressiveItalic>Blog</ExpressiveItalic>
+          <ExpressiveBadge class="text-sm tabular-nums">{page.total}</ExpressiveBadge>
+        </h1>
+        <p class="page-subtitle">
+          RSS is available at{" "}
+          <a href="/rss.xml" class="font-mono text-primary hover:underline"
+            >rss.xml</a
+          >
+          <span class="mx-2 text-border">|</span>
+          <a href="/tag" class="text-primary hover:underline">Browse by tags</a>
+        </p>
+      </div>
+
+      {
+        siteConfig.commandPalette.enabled && (
+          <button
+            type="button"
+            data-open-cmd
+            class="m3-pill inline-flex w-fit cursor-pointer items-center gap-2 border border-primary/25 bg-card/80 px-4 py-2 font-mono text-xs text-muted-foreground hover:border-tertiary hover:bg-tertiary-container hover:text-on-tertiary-container"
+          >
+            <Icon name="mdi:magnify" class="h-4 w-4" />
+            <span>Quick search</span>
+            <kbd class="rounded border border-border/80 bg-background/70 px-1.5 py-0.5 text-[10px]">
+              ⌘K
+            </kbd>
+          </button>
+        )
+      }
+    </header>
+
+    <div class="space-y-4">
+      {
+        page.data.map((post, index) => (
+          <ArticleTile post={post} eagerLoading={index < 5} />
+        ))
+      }
+    </div>
+
+    <ArticlesNavigator page={page} basePath="/blog" />
+  </main>
+</BaseLayout>

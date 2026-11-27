@@ -1,0 +1,180 @@
+---
+import { Icon } from "astro-icon/components";
+import FloatActionButtonItem from "./FloatActionButtonItem.astro";
+import { siteConfig } from "@/site.config";
+
+const fabLinks = siteConfig.navigation.fab;
+---
+
+<div
+  id="fab-root"
+  class="fixed right-5 bottom-5 z-50"
+  transition:persist="fab-root"
+>
+  <div
+    id="fab-menu"
+    class="pointer-events-none absolute right-0 bottom-18 flex flex-col items-end gap-2.5 opacity-0 transition-opacity duration-180"
+    aria-hidden="true"
+  >
+    <FloatActionButtonItem
+      id="fab-top"
+      label="Top"
+      ariaLabel="Back to top"
+      icon="mdi:arrow-up"
+      delayMs={180}
+      hiddenByDefault
+    />
+    {
+      siteConfig.commandPalette.enabled && (
+        <FloatActionButtonItem
+          id="fab-search"
+          label="Search ⌘K"
+          ariaLabel="Search (Ctrl+K)"
+          icon="mdi:magnify"
+          delayMs={150}
+          monoLabel
+        />
+      )
+    }
+    <FloatActionButtonItem
+      id="fab-theme"
+      label="Theme"
+      ariaLabel="Toggle color theme"
+      delayMs={120}
+    >
+      <Icon name="mdi:weather-sunny" is:inline class="hidden h-5 w-5 dark:block" />
+      <Icon name="mdi:weather-night" is:inline class="block h-5 w-5 dark:hidden" />
+    </FloatActionButtonItem>
+
+    <div class="my-0.5 h-px w-8 self-center bg-border/80"></div>
+
+    {
+      fabLinks.map((link, index) => (
+        <FloatActionButtonItem
+          href={link.href}
+          label={link.label}
+          icon={link.icon}
+          delayMs={(fabLinks.length - 1 - index) * 30}
+        />
+      ))
+    }
+  </div>
+
+  <!-- Main M3 Expressive FAB (Morphs 20px squircle <-> 28px circle on open) -->
+  <button
+    id="fab-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-label="Open navigation menu"
+    class="fab-main relative flex h-14 w-14 cursor-pointer items-center justify-center rounded-[20px] bg-primary text-primary-foreground shadow-lg hover:shadow-xl active:scale-92"
+  >
+    <svg
+      class="pointer-events-none absolute -inset-1.5 h-17 w-17 -rotate-90"
+      viewBox="0 0 68 68"
+      aria-hidden="true"
+    >
+      <rect
+        id="fab-ring-track"
+        x="2"
+        y="2"
+        width="64"
+        height="64"
+        rx="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        class="text-border/45 transition-[rx] duration-300"
+      />
+      <rect
+        id="fab-progress-ring"
+        x="2"
+        y="2"
+        width="64"
+        height="64"
+        rx="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-dasharray="238"
+        stroke-dashoffset="238"
+        class="text-primary transition-[stroke-dashoffset,rx] duration-150"
+      />
+    </svg>
+
+    <span
+      id="fab-icon-wrap"
+      class="pointer-events-none flex items-center justify-center"
+    >
+      <span id="fab-icon-menu">
+        <Icon name="mdi:menu" is:inline class="h-6 w-6" />
+      </span>
+      <span id="fab-icon-close" class="hidden">
+        <Icon name="mdi:close" is:inline class="h-6 w-6" />
+      </span>
+    </span>
+  </button>
+</div>
+
+<style>
+  .fab-main {
+    transition:
+      border-radius 360ms var(--ease-spring),
+      transform 320ms var(--ease-spring),
+      box-shadow 220ms ease,
+      background-color 200ms ease;
+  }
+
+  .fab-main[aria-expanded="true"] {
+    border-radius: 28px;
+  }
+
+  #fab-icon-wrap {
+    transition: transform 380ms var(--ease-spring);
+  }
+
+  .fab-main[aria-expanded="true"] #fab-icon-wrap {
+    transform: rotate(90deg);
+  }
+
+  :global(.fab-stagger-item) {
+    opacity: 0;
+    transform: translateY(12px) scale(0.82);
+    transition:
+      opacity 220ms ease,
+      transform 340ms var(--ease-spring),
+      border-radius 320ms var(--ease-spring),
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease;
+  }
+
+  #fab-menu[data-open="true"] :global(.fab-stagger-item) {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  #fab-menu[data-settled="true"] :global(.fab-stagger-item) {
+    transition-delay: 0ms !important;
+  }
+
+  #fab-menu[data-open="true"] :global(.fab-stagger-item:hover) {
+    transform: translateY(0) scale(1.06);
+  }
+
+  #fab-menu[data-open="true"] :global(.fab-stagger-item:active) {
+    transform: translateY(0) scale(0.95);
+  }
+
+  :global([data-fab-item][data-active="true"]) {
+    border-color: var(--primary);
+    background-color: var(--accent);
+    color: var(--primary);
+    border-radius: 14px;
+  }
+</style>
+
+<script>
+  import { initFab } from "@/scripts/fab";
+  initFab();
+</script>

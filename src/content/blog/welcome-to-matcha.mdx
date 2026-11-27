@@ -1,0 +1,99 @@
+---
+title: "Welcome to Matcha"
+pubDate: 2026-01-15
+tags: ["Matcha", "Astro", "Guide"]
+---
+
+import ExpressiveFlex from "@/components/expressive/ExpressiveFlex.astro";
+import ExpressiveItalic from "@/components/expressive/ExpressiveItalic.astro";
+import ExpressiveBadge from "@/components/expressive/ExpressiveBadge.astro";
+import ExpressiveHighlight from "@/components/expressive/ExpressiveHighlight.astro";
+import NavigationTile from "@/components/inlines/NavigationTile.astro";
+import ArticleNavigationTile from "@/components/inlines/ArticleNavigationTile.astro";
+
+Welcome to **Matcha** — a minimal Astro blog theme blending **Material 3 Expressive** motion with an **OKLCH hue-driven** palette.
+
+## Highlights
+
+- **Single-file configuration** in `src/site.config.ts` with separated TypeScript definitions in `src/types/config.ts`.
+- **OKLCH Hue Theming**: Change `theme.hue` to a single number (e.g. `137` for Uji Matcha, `255` for Indigo, `25` for Terracotta) and both the site and Giscus comment themes update together.
+- **Material 3 Expressive Motion**: Variable font hover morphing (`Roboto Flex` & `Fraunces`), spring-based shape transitions, radial dark-mode ripples, and staggered 4-band route curtains.
+- **Command Palette (`⌘K`)**: Instant keyboard search across posts, tags, pages, and quick actions.
+
+## Expressive Typography Components
+
+Matcha ships four reusable variable-font components under `src/components/expressive/`. Hover over each element below to feel the spring-driven axis morphing:
+
+<div class="not-prose my-6 rounded-3xl border border-border bg-card/80 p-6">
+  <p class="text-2xl leading-relaxed text-foreground sm:text-3xl">
+    <ExpressiveFlex>Craft</ExpressiveFlex>{" "}
+    <ExpressiveItalic>expressive</ExpressiveItalic>{" "}
+    <ExpressiveFlex>writing with</ExpressiveFlex>{" "}
+    <ExpressiveBadge>Matcha<span class="text-primary">.</span></ExpressiveBadge>
+  </p>
+  <p class="mt-4 text-base leading-relaxed text-muted-foreground">
+    Use <ExpressiveHighlight>ExpressiveHighlight</ExpressiveHighlight> inline to softly call out key phrases without breaking reading rhythm.
+  </p>
+</div>
+
+```mdx
+import ExpressiveFlex from "@/components/expressive/ExpressiveFlex.astro";
+import ExpressiveItalic from "@/components/expressive/ExpressiveItalic.astro";
+import ExpressiveBadge from "@/components/expressive/ExpressiveBadge.astro";
+import ExpressiveHighlight from "@/components/expressive/ExpressiveHighlight.astro";
+
+<ExpressiveFlex>Craft</ExpressiveFlex>
+<ExpressiveItalic>expressive</ExpressiveItalic>
+<ExpressiveBadge>Matcha</ExpressiveBadge>
+<ExpressiveHighlight>inline highlight</ExpressiveHighlight>
+```
+
+## Inline Navigation Components
+
+Embed rich link cards directly inside MDX articles using `NavigationTile` (for any route or external URL) and `ArticleNavigationTile` (automatically pulls title and excerpt from another blog post by `postId`):
+
+<NavigationTile
+  title="Explore Matcha"
+  subtitle="Browse all top-level pages and social links in one place."
+  href="/explore"
+  leadingIcon="mdi:compass-outline"
+/>
+
+<ArticleNavigationTile postId="markdown-style-guide" />
+
+```mdx
+import NavigationTile from "@/components/inlines/NavigationTile.astro";
+import ArticleNavigationTile from "@/components/inlines/ArticleNavigationTile.astro";
+
+<NavigationTile
+  title="Explore Matcha"
+  subtitle="Browse all top-level pages and social links in one place."
+  href="/explore"
+  leadingIcon="mdi:compass-outline"
+/>
+
+<ArticleNavigationTile postId="markdown-style-guide" />
+```
+
+## Quick Configuration
+
+Open `src/site.config.ts` and customize your site metadata, author profile, navigation, and palette:
+
+```ts
+export const siteConfig = defineSiteConfig({
+  site: {
+    title: "Matcha",
+    description: "Just share something interesting.",
+    lang: "zh-CN",
+    dateLocale: "zh-CN",
+  },
+  theme: {
+    defaultTheme: "system",
+    hue: 137,
+  },
+});
+```
+
+## Making It Yours
+
+Every page in `src/pages/` is plain Astro or MDX. Feel free to edit `src/pages/index.astro`, `src/pages/about.mdx`, or add new routes and register them in `siteConfig.navigation.routes`.

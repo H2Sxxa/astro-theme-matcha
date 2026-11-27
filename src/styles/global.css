@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+@plugin "@tailwindcss/typography";
+
+@import "./tokens.css";
+@import "./prose.css";
+@import "./utilities.css";
+
+/* =========================
+   Base Styles & Scrollbars
+   ========================= */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+  }
+
+  a {
+    @apply text-primary transition-colors;
+  }
+
+  a:hover {
+    @apply text-primary/80;
+  }
+
+  :focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--primary) 75%, transparent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Hide native root scrollbar on fine-pointer desktops (replaced by OverlayScrollbar) */
+  @media (pointer: fine) {
+    html,
+    body {
+      scrollbar-width: none;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  /* Unified Matcha Scrollbar for inner scrollable containers */
+  @supports not selector(::-webkit-scrollbar) {
+    :not(html):not(body) {
+      scrollbar-width: thin;
+      scrollbar-color: color-mix(in oklab, var(--primary) 35%, var(--border))
+        transparent;
+    }
+  }
+
+  :not(html):not(body)::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  :not(html):not(body)::-webkit-scrollbar-track,
+  :not(html):not(body)::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  :not(html):not(body)::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    transition: background-color 150ms ease;
+  }
+
+  :not(html):not(body)::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklab, var(--primary) 65%, transparent);
+  }
+
+  :not(html):not(body)::-webkit-scrollbar-thumb:active {
+    background-color: color-mix(in oklab, var(--primary) 85%, transparent);
+  }
+}
+
+/* =========================
+   View Transitions & Curtain
+   ========================= */
+
+html.theme-transitioning * {
+  view-transition-name: none !important;
+}
+
+html.theme-transitioning::view-transition-old(root),
+html.theme-transitioning::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.theme-transitioning::view-transition-old(root) {
+  z-index: 1;
+}
+
+html.theme-transitioning::view-transition-new(root) {
+  z-index: 9999;
+}
+
+html.curtain-active::view-transition-old(root),
+html.curtain-active::view-transition-new(root) {
+  animation: none !important;
+}
+
+html.curtain-locked,
+html.curtain-locked body {
+  overflow: hidden !important;
+}

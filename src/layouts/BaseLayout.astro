@@ -1,0 +1,159 @@
+---
+import { ClientRouter } from "astro:transitions";
+import BaseHead from "@/components/BaseHead.astro";
+import { siteConfig } from "@/site.config";
+import FloatActionButton from "@/components/FloatActionButton.astro";
+import PageLoader from "@/components/PageLoader.astro";
+import CommandPalette from "@/components/CommandPalette.astro";
+import RouteTransitionOverlay from "@/components/RouteTransitionOverlay.astro";
+import OverlayScrollbar from "@/components/OverlayScrollbar.astro";
+
+interface Props {
+  dontIncludeFABPadding?: boolean;
+  description?: string;
+  showTitleTemplate?: boolean;
+  title?: string;
+  image?: string | ImageMetadata;
+}
+
+const { dontIncludeFABPadding, description, title, showTitleTemplate, image } =
+  Astro.props as Props;
+const { site, theme } = siteConfig;
+const defaultTheme: "system" | "light" | "dark" = theme.defaultTheme;
+const themeStyleParts: string[] = [`--hue-primary: ${theme.hue}`];
+if (typeof theme.tertiaryHue === "number") {
+  themeStyleParts.push(`--hue-tertiary: ${theme.tertiaryHue}`);
+}
+const themeStyle: string = themeStyleParts.join("; ");
+---
+
+<html lang={site.lang} style={themeStyle}>
+  <head>
+    <!-- Theme (dark/light) with manual override + circular View Transition ripple -->
+    <script is:inline define:vars={{ defaultTheme }}>
+      (() => {
+        const STORAGE_KEY = "blog-theme";
+        const DEFAULT_THEME = defaultTheme;
+        const colorSchemeQuery = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        );
+
+        const resolveIsDark = () => {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved === "dark") return true;
+          if (saved === "light") return false;
+          if (DEFAULT_THEME === "dark") return true;
+          if (DEFAULT_THEME === "light") return false;
+          return colorSchemeQuery.matches;
+        };
+
+        const setColorScheme = (element, dark) => {
+          element.classList.toggle("dark", dark);
+        };
+
+        const applyColorScheme = () => {
+          setColorScheme(document.documentElement, resolveIsDark());
+        };
+
+        applyColorScheme();
+
+        if (!window.__themeControllerInitialized) {
+          window.__themeControllerInitialized = true;
+
+          colorSchemeQuery.addEventListener("change", () => {
+            if (!localStorage.getItem(STORAGE_KEY)) {
+              applyColorScheme();
+              window.dispatchEvent(
+                new CustomEvent("theme-change", {
+                  detail: { dark: resolveIsDark() },
+                }),
+              );
+            }
+          });
+
+          document.addEventListener("astro:before-swap", (event) => {
+            setColorScheme(event.newDocument.documentElement, resolveIsDark());
+          });
+
+          window.__toggleTheme = (originX, originY) => {
+            const nextDark = !document.documentElement.classList.contains("dark");
+            const commit = () => {
+              localStorage.setItem(STORAGE_KEY, nextDark ? "dark" : "light");
+              setColorScheme(document.documentElement, nextDark);
+              window.dispatchEvent(
+                new CustomEvent("theme-change", { detail: { dark: nextDark } }),
+              );
+            };
+
+            const reduced = window.matchMedia(
+              "(prefers-reduced-motion: reduce)",
+            ).matches;
+            if (!document.startViewTransition || reduced) {
+              commit();
+              return;
+            }
+
+            const x = typeof originX === "number" ? originX : window.innerWidth - 48;
+            const y = typeof originY === "number" ? originY : window.innerHeight - 48;
+            const endRadius = Math.hypot(
+              Math.max(x, window.innerWidth - x),
+              Math.max(y, window.innerHeight - y),
+            );
+
+            document.documentElement.classList.add("theme-transitioning");
+            const transition = document.startViewTransition(commit);
+
+            transition.ready
+              .then(() => {
+                document.documentElement.animate(
+                  {
+                    clipPath: [
+                      `circle(0px at ${x}px ${y}px)`,
+                      `circle(${endRadius}px at ${x}px ${y}px)`,
+                    ],
+                  },
+                  {
+                    duration: 480,
+                    easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+                    pseudoElement: "::view-transition-new(root)",
+                  },
+                );
+              })
+              .catch(() => {});
+
+            transition.finished.finally(() => {
+              document.documentElement.classList.remove("theme-transitioning");
+            });
+          };
+        }
+      })();
+    </script>
+    <BaseHead
+      title={title || site.title}
+      description={description || site.description}
+      showTitleTemplate={showTitleTemplate}
+      image={image}
+    />
+  </head>
+  <body class="relative isolate min-h-dvh">
+    <div
+      class="washi-backdrop-light pointer-events-none fixed inset-0 -z-10"
+      aria-hidden="true"
+    >
+    </div>
+    <div
+      class="washi-backdrop-grain pointer-events-none fixed inset-0 -z-10"
+      aria-hidden="true"
+    >
+    </div>
+    <PageLoader />
+    <RouteTransitionOverlay />
+    <OverlayScrollbar />
+    <ClientRouter />
+    <slot />
+    {siteConfig.commandPalette.enabled && <CommandPalette />}
+    <FloatActionButton />
+    <!-- Padding for FAB -->
+    {!dontIncludeFABPadding && <div class="h-24" />}
+  </body>
+</html>
