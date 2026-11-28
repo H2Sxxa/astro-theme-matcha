@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <defs>
+    <linearGradient id="matcha-bg" x1="24" y1="20" x2="232" y2="236" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#DCECD2" />
+      <stop offset="100%" stop-color="#A8CCA0" />
+    </linearGradient>
+    <linearGradient id="matcha-leaf-a" x1="76" y1="64" x2="184" y2="188" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4A7C44" />
+      <stop offset="100%" stop-color="#2D572C" />
+    </linearGradient>
+    <linearGradient id="matcha-leaf-b" x1="128" y1="78" x2="194" y2="178" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7CB374" />
+      <stop offset="100%" stop-color="#4A7C44" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="url(#matcha-bg)" />
+  <circle cx="128" cy="128" r="88" fill="#F4F8EF" fill-opacity="0.55" />
+  <path
+    d="M128 56C94 82 78 118 78 152C78 176.3 97.7 196 122 196C146.3 196 166 176.3 166 152C166 118 150 82 128 56Z"
+    fill="url(#matcha-leaf-a)"
+  />
+  <path
+    d="M148 82C128 104 118 130 118 156C118 176 132 192 152 192C172 192 186 176 186 156C186 130 172 104 148 82Z"
+    fill="url(#matcha-leaf-b)"
+    fill-opacity="0.88"
+  />
+  <circle cx="128" cy="144" r="14" fill="#F4F8EF" fill-opacity="0.9" />
+</svg>

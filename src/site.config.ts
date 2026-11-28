@@ -1,27 +1,31 @@
+import authorAvatar from "@/assets/avatar.svg";
+import friendAvatarOne from "@/assets/friend-1.svg";
+import friendAvatarTwo from "@/assets/friend-2.svg";
 import { defineSiteConfig, type SiteConfig } from "@/types/config";
 
 export const siteConfig: SiteConfig = defineSiteConfig({
   site: {
     title: "Matcha",
-    description: "Just share something interesting.",
+    description:
+      "A minimal Astro blog theme with Material 3 Expressive motion and OKLCH theming.",
     lang: "zh-CN",
     dateLocale: "zh-CN",
   },
 
   author: {
-    name: "H2Sxxa",
-    bio: "Just Developing for Fun.",
-    avatar: "https://avatars.githubusercontent.com/u/88923783",
-    roles: ["Full-Stack", "Rustacean", "Modder", "Open-Source Builder"],
+    name: "Hakurei",
+    bio: "Crafting Calm Web Spaces.",
+    avatar: authorAvatar,
+    roles: ["Writer", "Designer", "Web Developer", "Open-Source Enthusiast"],
     socials: [
       {
-        href: "https://github.com/H2Sxxa",
+        href: "https://github.com",
         title: "GitHub",
-        description: "My GitHub Profile.",
+        description: "Open-source projects and code.",
         icon: "mdi:github",
       },
       {
-        href: "mailto:h2sxxa0w0@gmail.com",
+        href: "mailto:hello@example.com",
         title: "Email",
         description: "Feel free to reach out.",
         icon: "mdi:email",
@@ -87,10 +91,16 @@ export const siteConfig: SiteConfig = defineSiteConfig({
     ],
     friends: [
       {
-        title: "H2Sxxa",
-        intro: "Just Developing for Fun.",
-        link: "https://h2sxxa.github.io/",
-        avatar: "https://avatars.githubusercontent.com/u/88923783",
+        title: "Example Blog",
+        intro: "Notes on typography, web standards, and calm interfaces.",
+        link: "https://example.com",
+        avatar: friendAvatarOne,
+      },
+      {
+        title: "Design Journal",
+        intro: "Essays on color systems, layouts, and everyday tools.",
+        link: "https://example.com",
+        avatar: friendAvatarTwo,
       },
     ],
     routes: [

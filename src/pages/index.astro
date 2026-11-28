@@ -23,13 +23,24 @@ const { author } = siteConfig;
           class="home-avatar-m3e home-reveal home-reveal-1"
         >
           <span class="home-avatar-clip">
-            <Image
-              src={author.avatar}
-              alt={author.name}
-              inferSize
-              loading="eager"
-              class="home-avatar-img h-28 w-28 md:h-36 md:w-36"
-            />
+            {
+              typeof author.avatar === "string" ? (
+                <Image
+                  src={author.avatar}
+                  alt={author.name}
+                  inferSize
+                  loading="eager"
+                  class="home-avatar-img h-28 w-28 md:h-36 md:w-36"
+                />
+              ) : (
+                <Image
+                  src={author.avatar}
+                  alt={author.name}
+                  loading="eager"
+                  class="home-avatar-img h-28 w-28 md:h-36 md:w-36"
+                />
+              )
+            }
             <span class="home-avatar-sheen" aria-hidden="true"></span>
           </span>
         </div>
@@ -47,18 +58,18 @@ const { author } = siteConfig;
         >
           <span class="block">
             <ExpressiveFlex class="text-[clamp(2rem,4.5vw,2.75rem)]">
-              Just
+              Crafting
             </ExpressiveFlex>{" "}
             <ExpressiveItalic class="text-[clamp(2.35rem,5.2vw,3.25rem)]">
-              Developing
+              Calm
             </ExpressiveItalic>
           </span>
           <span class="block">
             <ExpressiveFlex class="text-[clamp(1.85rem,4vw,2.5rem)]">
-              for
+              Web
             </ExpressiveFlex>{" "}
             <ExpressiveBadge class="text-[clamp(2.4rem,5.5vw,3.375rem)]">
-              Fun<span class="text-primary">.</span>
+              Spaces<span class="text-primary">.</span>
             </ExpressiveBadge>
           </span>
         </h2>
@@ -82,9 +93,9 @@ const { author } = siteConfig;
         }
 
         <p class="home-manifesto home-reveal home-reveal-4 mt-3">
-          I think technology should make the world better, so I keep{" "}
-          <ExpressiveHighlight>programming</ExpressiveHighlight> instead of
-          &lsquo;coding&rsquo;.
+          A minimal space for thoughtful essays, tactile motion, and{" "}
+          <ExpressiveHighlight>expressive</ExpressiveHighlight> typography on
+          the open web.
         </p>
 
         <nav

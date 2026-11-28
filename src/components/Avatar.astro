@@ -1,9 +1,10 @@
 ---
+import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import { cn } from "@/utils/cn";
 
 interface Props {
-  src: string;
+  src: ImageMetadata | string;
   alt?: string | null;
   size?: "sm" | "md" | "lg";
   class?: string;
@@ -24,11 +25,22 @@ const sizes = {
     Astro.props.class,
   )}
 >
-  <Image
-    src={src}
-    alt={alt ?? "Avatar"}
-    inferSize
-    loading="eager"
-    class:list={["rounded-[inherit] object-cover", sizes[size]]}
-  />
+  {
+    typeof src === "string" ? (
+      <Image
+        src={src}
+        alt={alt ?? "Avatar"}
+        inferSize
+        loading="eager"
+        class:list={["rounded-[inherit] object-cover", sizes[size]]}
+      />
+    ) : (
+      <Image
+        src={src}
+        alt={alt ?? "Avatar"}
+        loading="eager"
+        class:list={["rounded-[inherit] object-cover", sizes[size]]}
+      />
+    )
+  }
 </div>

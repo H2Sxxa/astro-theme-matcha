@@ -26,14 +26,26 @@ const friends = siteConfig.navigation.friends;
             rel="noopener noreferrer"
             class="group decorative flex items-center gap-4 p-4 no-underline"
           >
-            <Image
-              src={friend.avatar}
-              alt={friend.title}
-              inferSize
-              loading="eager"
-              class="h-14 w-14 shrink-0 rounded-[38%] border-[1.5px] border-primary/35 object-cover transition-[border-radius,transform,border-color] duration-350 ease-(--ease-spring) group-hover:scale-105 group-hover:rounded-[50%] group-hover:border-primary"
-              aria-label={`${friend.title}'s avatar`}
-            />
+            {
+              typeof friend.avatar === "string" ? (
+                <Image
+                  src={friend.avatar}
+                  alt={friend.title}
+                  inferSize
+                  loading="eager"
+                  class="h-14 w-14 shrink-0 rounded-[38%] border-[1.5px] border-primary/35 object-cover transition-[border-radius,transform,border-color] duration-350 ease-(--ease-spring) group-hover:scale-105 group-hover:rounded-[50%] group-hover:border-primary"
+                  aria-label={`${friend.title}'s avatar`}
+                />
+              ) : (
+                <Image
+                  src={friend.avatar}
+                  alt={friend.title}
+                  loading="eager"
+                  class="h-14 w-14 shrink-0 rounded-[38%] border-[1.5px] border-primary/35 object-cover transition-[border-radius,transform,border-color] duration-350 ease-(--ease-spring) group-hover:scale-105 group-hover:rounded-[50%] group-hover:border-primary"
+                  aria-label={`${friend.title}'s avatar`}
+                />
+              )
+            }
             <div class="min-w-0">
               <h2 class="truncate font-expressive text-lg font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
                 {friend.title}

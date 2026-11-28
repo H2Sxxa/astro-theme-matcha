@@ -1,3 +1,5 @@
+import type { ImageMetadata } from "astro";
+
 export interface SiteMetadataConfig {
   readonly title: string;
   readonly description: string;
@@ -16,7 +18,7 @@ export interface SocialLink {
 export interface AuthorConfig {
   readonly name: string;
   readonly bio: string;
-  readonly avatar: string;
+  readonly avatar: ImageMetadata | string;
   readonly roles: readonly string[];
   readonly socials: readonly SocialLink[];
 }
@@ -37,7 +39,7 @@ export interface FriendLink {
   readonly title: string;
   readonly intro: string;
   readonly link: string;
-  readonly avatar: string;
+  readonly avatar: ImageMetadata | string;
 }
 
 export interface TopLevelRouteConfig {

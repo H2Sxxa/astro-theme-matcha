@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="terracotta-bg" x1="12" y1="12" x2="116" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F6DFD2" />
+      <stop offset="100%" stop-color="#E4B196" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" fill="url(#terracotta-bg)" />
+  <rect x="34" y="34" width="60" height="60" rx="20" fill="#A45334" fill-opacity="0.85" />
+  <circle cx="64" cy="64" r="16" fill="#FDF5F0" fill-opacity="0.82" />
+</svg>
